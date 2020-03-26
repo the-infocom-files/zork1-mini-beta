@@ -530,7 +530,6 @@ metal bolt." CR>
 	      
 <ROUTINE BUTTON-FCN ()
 	 <COND (<VERB? PUSH>
-	 <COND (<VERB? PUSH>
 		<COND (<==? ,PRSO ,RED-BUTTON>
 	        <FCLEAR ,DAM-ROOM ,TOUCHBIT>
 		       <TELL "The room lights ">
