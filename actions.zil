@@ -530,11 +530,8 @@ metal bolt." CR>
 	      
 <ROUTINE BUTTON-FCN ()
 	 <COND (<VERB? PUSH>
-		<COND (<==? ,PRSO ,RED-BUTTON>
-	        <FCLEAR ,DAM-ROOM ,TOUCHBIT>
-		       <TELL "The room lights ">
+		<FCLEAR ,DAM-ROOM ,TOUCHBIT>
 		<SETG GATE_FLAG <NOT ,GATE-FLAG>>
-		       <COND (<FSET? ,HERE ,ONBIT>
 		<TELL "Click." CR>)>>
 
 <ROUTINE TOOL-CHEST-FCN ()
