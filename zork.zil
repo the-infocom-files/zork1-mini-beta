@@ -27,3 +27,9 @@
 <PROPDEF SIZE 5>
 <PROPDEF CAPACITY 0>
 <PROPDEF VALUE 0>
+
+"Define these temporarily to allow the game to compile."
+<CONSTANT F-BUSY? <>>
+<CONSTANT F-CONSCIOUS <>>
+<CONSTANT P-OFLAG <>>
+<CONSTANT UNCONSCIOUS <>>
