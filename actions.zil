@@ -91,8 +91,8 @@ and perilous adventure which has tested your wit and courage.">
 
 <GLOBAL RUG-MOVED <>>
 
-<ROUTINE LIVING-ROOM-FCN (RARG "AUX" RUG? TC)
-	#DECL ((RUG?) <OR ATOM FALSE> (TC) OBJECT)
+<ROUTINE LIVING-ROOM-FCN (RARG "AUX" RUG?)
+	#DECL ((RUG?) <OR ATOM FALSE>)
 	<COND (<==? .RARG ,M-LOOK>
 	       <COND (,MAGIC-FLAG
 		      <TELL
@@ -249,7 +249,6 @@ trap-door." CR>
 		<COND (<OR <AND <VERB? THROW GIVE>
 				<==? ,PRSI ,TROLL>>
 			   <VERB? TAKE MOVE MUNG>>
-		       <AWAKEN ,TROLL>
 		       <COND (<VERB? THROW GIVE>
 			      <TELL
 "The troll grabs the " D ,PRSO " and eats it." CR>
@@ -308,8 +307,8 @@ trap-door." CR>
 	  (<NOT <OR <EQUAL? ,HERE ,EAST-OF-HOUSE ,WEST-OF-HOUSE>
 		    <EQUAL? ,HERE ,NORTH-OF-HOUSE ,SOUTH-OF-HOUSE>>>
 	   <COND (<VERB? FIND>
-		  <COND (<==? ,HERE ,CLEARING>
-			 <TELL "It seems to be to the west." CR>)
+		  <COND (<==? ,HERE ,PATH>
+			 <TELL "It seems to be to the south." CR>)
 			(ELSE
 			 <TELL "It was here just a minute ago...." CR>)>)
 		 (ELSE <TELL "You're not at the house." CR>)>)
@@ -331,7 +330,7 @@ trap-door." CR>
 	  (<VERB? BURN>
 	   <TELL "You must be joking." CR>)>>
     
-<ROUTINE CLEARING-FCN (RARG)
+;<ROUTINE CLEARING-FCN (RARG)
   	 <COND (<==? .RARG ,M-ENTER>
 		<COND (<NOT ,GRATE-REVEALED>
 		       <FSET ,GRATE ,INVISIBLE>)>)
@@ -371,13 +370,13 @@ trap-door." CR>
 	       (<VERB? OPEN CLOSE>
 		<COND (,GRUNLOCK
 		       <OPEN-CLOSE ,GRATE
-				   <COND (<==? ,HERE ,CLEARING>
+				   <COND (<==? ,HERE ,PATH>
 					  "The grating opens.")
 					 (T
 					  "The grating opens to reveal trees above you.")>
 				   "The grating is closed.">
 		       <COND (<FSET? ,GRATE ,OPENBIT>
-			      <COND (<AND <NOT <==? ,HERE ,CLEARING>>
+			      <COND (<AND <NOT <==? ,HERE ,PATH>>
 					  <NOT ,GRATE-REVEALED>>
 				     <TELL 
 "A pile of leaves falls onto your head and to the ground." CR>
@@ -528,24 +527,11 @@ metal bolt." CR>
 		     (ELSE <TELL
 "The bolt won't turn using the " D ,PRSI "." CR>)>)>>
 	      
-<ROUTINE DBUTTONS ()
+<ROUTINE BUTTON-FCN ()
 	 <COND (<VERB? PUSH>
-		<COND (<==? ,PRSO ,RED-BUTTON>
-		       <TELL "The room lights ">
-		       <COND (<FSET? ,HERE ,ONBIT>
-			      <FCLEAR ,HERE ,ONBIT>
-			      <TELL "shut off." CR>)
-			     (ELSE
-			      <FSET ,HERE ,ONBIT>
-			      <TELL "come on." CR>)>)
-		      (<==? ,PRSO ,BROWN-BUTTON>
-		       <FCLEAR ,DAM-ROOM ,TOUCHBIT>
-		       <SETG GATE-FLAG <>>
-		       <TELL "Click." CR>)
-		      (<==? ,PRSO ,YELLOW-BUTTON>
-		       <FCLEAR ,DAM-ROOM ,TOUCHBIT>
-		       <SETG GATE-FLAG T>
-		       <TELL "Click." CR>)>)>>
+		<FCLEAR ,DAM-ROOM ,TOUCHBIT>
+		<SETG GATE-FLAG <NOT ,GATE-FLAG>>
+		<TELL "Click." CR>)>>
 
 <ROUTINE TOOL-CHEST-FCN ()
 	 <COND (<VERB? EXAMINE>
@@ -611,11 +597,15 @@ with the water level lowered, there is merely a muddy stream to the south.">)>
 	 <REMOVE ,WATER>
 	 T)>>
 
+<GLOBAL SWIMYUKS
+	<LTABLE
+	 "You can't swim in the dungeon.">>
+
 <ROUTINE WATER-FUNCTION ("AUX" AV W PI?)
 	 #DECL ((AV) <OR OBJECT FALSE> (W) OBJECT (PI?) <OR ATOM FALSE>)
 	 <COND (<VERB? SGIVE> <RFALSE>)
 	       (<VERB? THROUGH>
-		<TELL <PICK-ONE ,SWIMYUKS>>
+		<TELL <PICK-ONE ,SWIMYUKS> CR>
 		<RTRUE>)
 	       (<VERB? FILL>	;"fill bottle with water =>"
 		<SET W ,PRSI>	   ;"put water in bottle"
@@ -873,7 +863,7 @@ this fine " D .X " is doing here.\"" CR>
 
 <GLOBAL THIEF-ENGROSSED <>>
 
-<ROUTINE ROBBER-FUNCTION ("OPTIONAL" (MODE <>) "AUX" (FLG <>) X N)
+<ROUTINE ROBBER-FUNCTION ("OPTIONAL" (MODE <>) "AUX" (FLG <>) X)
 	 #DECL ((DEM) HACK (FLG) <OR ATOM FALSE>)
 	 <COND (<NOT .MODE>
 		<COND (<AND <==? ,PRSO ,KNIFE>
@@ -936,7 +926,7 @@ D ,PRSO " and stops to admire its beauty." CR>)
 			    <NOT <FSET? ,THIEF ,INVISIBLE>>>
 		       <TELL "You'd be stabbed in the back!" CR>)>)>>
 
-<ROUTINE TREASURE-ROOM-FCN (RARG "AUX" (FLG <>) TL)
+<ROUTINE TREASURE-ROOM-FCN (RARG "AUX" (FLG <>))
 	 #DECL ((FLG) <OR ATOM FALSE>)
   <COND (<AND <==? .RARG ,M-ENTER>
 	      <1? <GET <INT I-THIEF> ,C-ENABLED?>>
@@ -951,7 +941,7 @@ D ,PRSO " and stops to admire its beauty." CR>)
 		<FSET ,THIEF ,FIGHTBIT>)>
 	 <THIEF-IN-TREASURE>)>>
 
-<ROUTINE THIEF-IN-TREASURE ("AUX" F N)
+<ROUTINE THIEF-IN-TREASURE ("AUX" F)
 	 <SET F <FIRST? ,HERE>>
 	 <COND (<AND .F <NEXT? .F>>
 		<TELL
@@ -1037,10 +1027,7 @@ D ,PRSO " and stops to admire its beauty." CR>)
 	 <COND (<L? .N1 .N2> .N1)
 	       (T .N2)>>
 
-<ROUTINE LIGHT-INT (OBJ INTNAM TBLNAM "AUX" (TBL <VALUE .TBLNAM>) TICK)
-	 #DECL ((OBJ) OBJECT (TBLNAM INTNAM) ATOM (TBL) <PRIMTYPE VECTOR>
-		(TICK) FIX)
-	 <ENABLE <QUEUE .INTNAM <SET TICK <GET .TBL 0>>>>
+<ROUTINE LIGHT-INT (OBJ TBL TICK)
 	 <COND (<0? .TICK>
 		<FCLEAR .OBJ ,LIGHTBIT>
 		<FCLEAR .OBJ ,ONBIT>)>
@@ -1048,9 +1035,7 @@ D ,PRSO " and stops to admire its beauty." CR>)
 		<COND (<0? .TICK>
 		       <TELL "The " D .OBJ " is out." CR>)
 		      (T
-		       <TELL <GET .TBL 1> CR>)>)>
-	 <COND (<NOT <0? .TICK>>
-		<SETG .TBLNAM <REST .TBL 4>>)>>
+		       <TELL <GET .TBL 1> CR>)>)>>
 
 \
 
@@ -1063,7 +1048,7 @@ D ,PRSO " and stops to admire its beauty." CR>)
 
 "SUBTITLE COAL MINE"
 
-<ROUTINE BOOM-ROOM (RARG "AUX" (DUMMY? <>) FLAME)
+<ROUTINE BOOM-ROOM (RARG)
          <COND (<NOT .RARG>
 		<COND (<IN? ,TORCH ,WINNER>
 		       <TELL " ** BOOOOOOM **" CR>
@@ -1101,7 +1086,6 @@ is holding his nose." CR>)>)
 	      MINE-2
 	      MINE-3
 	      GAS-ROOM
-              SQUEEKY-ROOM
 	      MINE-ENTRANCE>>
 
 <GLOBAL CAGE-TOP T>
@@ -1456,7 +1440,7 @@ you!" CR>)
 
 "SUBTITLE TOITY POIPLE BOIDS A CHOIPIN' AN' A BOIPIN' ... "
 
-<ROUTINE TREE-ROOM (RARG "AUX" F)
+<ROUTINE TREE-ROOM (RARG)
 	 <COND (<==? .RARG ,M-LOOK>
 		<TELL
 "You are about 10 feet above the ground nestled among some large
@@ -1490,7 +1474,7 @@ compromised its esthetic appeal." CR>
 "There is a delicate crunch from beneath you.">
 		<OPEN-EGG>)>>
 
-<ROUTINE OPEN-EGG ("AUX" L)
+<ROUTINE OPEN-EGG ()
 	 <TELL
 "Nestled inside the now broken egg is a golden clockwork canary." CR>
 	 <MOVE ,BROKEN-EGG <LOC ,EGG>>

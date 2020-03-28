@@ -17,7 +17,7 @@
 
 <OBJECT PSEUDO-OBJECT
 	(DESC "pseudo")
-	(ACTION GRANITE)>
+	(ACTION CRETIN)>
 
 <OBJECT IT	;"was IT"
 	(IN GLOBAL-OBJECTS)
@@ -31,6 +31,11 @@
 	(ADJECTIVE STONE FORBIDDING STEEP)
 	(DESC "stairs")
 	(FLAGS NDESCBIT CLIMBBIT)>
+
+<OBJECT SAILOR
+	(IN GLOBAL-OBJECTS)
+	(DESC "sailor")
+	(FLAGS NDESCBIT)>
 
 <OBJECT PATHOBJ
 	(IN GLOBAL-OBJECTS)
@@ -133,6 +138,13 @@
 	(FLAGS VILLAIN NDESCBIT INVISIBLE SACREDBIT)
 	(STRENGTH 0)
 	(ACTION 0)>
+
+<OBJECT HANDS
+	(IN GLOBAL-OBJECTS)
+	(DESC "pair of hands")
+	(SYNONYM PAIR HANDS HAND)
+	(ADJECTIVE BARE)
+	(FLAGS NDESCBIT TOOLBIT)>
 
 <OBJECT ME
 	(IN GLOBAL-OBJECTS)
@@ -303,7 +315,7 @@ the coffin.")
 	(SYNONYM BUTTON)
 	(DESC "button")
 	(FLAGS NDESCBIT)
-	(ACTION DBUTTONS)>
+	(ACTION BUTTON-FCN)>
 
 <OBJECT TROPHY-CASE	;"was TCASE -- first obj so L.R. desc looks right."
 	(IN LIVING-ROOM)
@@ -311,7 +323,6 @@ the coffin.")
 	(ADJECTIVE TROPHY)
 	(DESC "trophy case")
 	(FLAGS TRANSBIT CONTBIT NDESCBIT)
-	(ACTION TROPHY-CASE-FCN)
 	(CAPACITY 10000)>
 
 <OBJECT RUG	;"was RUG"
@@ -490,6 +501,14 @@ the coffin.")
 	(VALUE 10)
 	(TVALUE 5)>
 
+<OBJECT KEYS
+	(IN MAZE-5)
+	(DESC "skeleton key")
+	(SYNONYM KEY)
+	(ADJECTIVE SKELETON)
+	(FLAGS TAKEBIT TOOLBIT)
+	(SIZE 10)>
+
 <OBJECT LAMP	;"was LAMP"
 	(IN LIVING-ROOM)
 	(SYNONYM LAMP LANTERN LIGHT)
@@ -538,7 +557,7 @@ the coffin.")
 	(TVALUE 6)>
 
 <OBJECT LEAVES	;"was LEAVE"
-	(IN GRATING-CLEARING)
+	(IN PATH)
 	(SYNONYM LEAVES PILE)
 	(DESC "pile of leaves")
 	(FLAGS TAKEBIT BURNBIT TRYTAKEBIT)
@@ -968,7 +987,7 @@ at the edge of the path.")
        IF GRATE IS OPEN ELSE "You can't go through the closed grating.")
       (ACTION FOREST-ROOM)
       (FLAGS RLANDBIT ONBIT SACREDBIT)
-      (GLOBAL TREE SONGBIRD WHITE-HOUSE FOREST)>
+      (GLOBAL TREE SONGBIRD WHITE-HOUSE FOREST GRATE)>
 
 <ROOM UP-A-TREE	;"was TREE"
       (IN ROOMS)
@@ -1332,8 +1351,8 @@ thousands of lost souls weeping and moaning.  A passage exits to the north.")
 <ROOM DOME-ROOM	;"was DOME"
       (IN ROOMS)
       (DESC "Dome Room")
-      (NW TO DOME-ROOM)
-      (DOWN TO TORCH-ROOM
+      (NW TO ROUND-ROOM)
+      (DOWN TO NORTH-TEMPLE
        IF DOME-FLAG ELSE "You cannot go down without fracturing many bones.")
       (ACTION DOME-ROOM-FCN)
       (FLAGS RLANDBIT)
@@ -1350,7 +1369,6 @@ leading down.")
       (EAST TO EGYPT-ROOM)
       (SOUTH TO SOUTH-TEMPLE)
       (UP "You cannot reach the rope.")
-      (ACTION TORCH-ROOM-FCN)
       (GLOBAL DOME STAIRS)
       (FLAGS RLANDBIT ONBIT SACREDBIT)>
 
@@ -1451,7 +1469,6 @@ unbearable.  You can see beaches on both the east and west shores.")
       (UP "You cannot go upstream due to strong currents.")
       (LAND TO SANDY-BEACH)
       (EAST TO SANDY-BEACH)
-      (ACTION RIVR4-ROOM)
       (FLAGS RWATERBIT SACREDBIT)
       (GLOBAL GLOBAL-WATER RIVER)>
 
@@ -1493,7 +1510,7 @@ lies to the northeast.")
 crosses over the falls to the east and a path leads to the southwest.")
       (DESC "End of Rainbow")
       (UP TO ARAGAIN-FALLS IF RAINBOW-FLAG)
-      (EAST TO ARAGIAN-FALLS IF RAINBOW-FLAG)
+      (EAST TO ARAGAIN-FALLS IF RAINBOW-FLAG)
       (SW TO CANYON-BOTTOM)
       (FLAGS RLANDBIT ONBIT )
       (GLOBAL GLOBAL-WATER RAINBOW RIVER)>
@@ -1519,7 +1536,7 @@ by towering white cliffs.  Below rainbow-clad Aragain Falls, the river twists
 into a passage which is impossible to enter. Paths enter the forest to
 the west and north.  It is possible to climb down into the canyon from here.")
       (DESC "Canyon View")
-      (DOWN TO CLIFF-BOTTOM)
+      (DOWN TO CANYON-BOTTOM)
       (WEST TO EAST-OF-HOUSE)
       (NORTH TO FOREST-EDGE)
       (FLAGS RLANDBIT ONBIT SACREDBIT)
@@ -1560,7 +1577,7 @@ iron chain is attached.  A foul odor comes from the room to the north.")
       (DESC "Shaft Room")
       (DOWN "You'd never fit.")
       (WEST TO BAT-ROOM)
-      (NORTH TO SMELLY-ROOM)
+      (NORTH TO GAS-ROOM)
       (FLAGS RLANDBIT)>
 
 <ROOM GAS-ROOM	;"was BOOM"
@@ -1676,12 +1693,11 @@ downward.")
 	  WEST-OF-HOUSE>>
 
 <GLOBAL FOREST-AROUND
-  <LTABLE FOREST-1 FOREST-2 PATH FOREST-1>>
+  <LTABLE PATH FOREST-EDGE PATH>>
 
 <GLOBAL IN-HOUSE-AROUND
   <LTABLE LIVING-ROOM KITCHEN ATTIC KITCHEN>>
 
 <GLOBAL ABOVE-GROUND
   <LTABLE WEST-OF-HOUSE NORTH-OF-HOUSE EAST-OF-HOUSE SOUTH-OF-HOUSE
-	  FOREST-1 FOREST-2 PATH GRATING-CLEARING
-	  CANYON-VIEW>>
+	  FOREST-EDGE PATH CANYON-VIEW>>

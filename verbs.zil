@@ -197,8 +197,8 @@ for the final secret.\"" CR>)>
 	 <V-SCORE>
 	 <QUIT>>
 
-<ROUTINE V-QUIT ("OPTIONAL" (ASK? T) "AUX" SCOR)
-	 #DECL ((ASK?) <OR ATOM <PRIMTYPE LIST>> (SCOR) FIX)
+<ROUTINE V-QUIT ("OPTIONAL" (ASK? T))
+	 #DECL ((ASK?) <OR ATOM <PRIMTYPE LIST>>)
 	 <V-SCORE>
 	 <COND (<OR <AND .ASK?
 			 <TELL 
@@ -662,8 +662,7 @@ and both tumble to the ground." CR>
 	 <RFATAL>>
 
 <ROUTINE V-BOARD
-	 ("AUX" AV)
-	 #DECL ((AV) OBJECT)
+	 ()
 	 <TELL "You are now in the " D ,PRSO "." CR>
 	 <MOVE ,WINNER ,PRSO>
 	 <APPLY <GETP ,PRSO ,P?ACTION> ,M-ENTER>
@@ -720,6 +719,9 @@ and both tumble to the ground." CR>
 		       <SCORE-OBJ .RM>
 		       <COND (.V? <V-FIRST-LOOK>)>
 		       <RTRUE>)>)>>
+
+<ROUTINE V-PLUG ()
+	 <TELL "This has no effect." CR>>
 
 <ROUTINE PRE-POUR-ON
 	 ()
@@ -812,10 +814,16 @@ by knocking down the wall on the east of the room." CR>
 <ROUTINE V-LISTEN ()
 	 <TELL "The " D ,PRSO " makes no sound." CR>>
 
+<ROUTINE V-LOCK ()
+	 <TELL "It" <PICK-ONE ,HO-HUM> CR>>
+
+<ROUTINE V-UNLOCK ()
+	 <V-LOCK>>
+
 <ROUTINE V-PRAY
 	 ()
 	 <COND (<==? ,HERE ,SOUTH-TEMPLE>
-		<GOTO ,FOREST-1>)
+		<GOTO ,FOREST-EDGE>)
 	       (T
 		<TELL
 "Your prayers may be someday answered." CR>)>>
@@ -840,6 +848,9 @@ by knocking down the wall on the east of the room." CR>
 		       <TELL "It would be suicidal." CR>)
 		      (ELSE <V-SKIP>)>)
 	       (ELSE <V-SKIP>)>>
+
+<ROUTINE V-SKIP ()
+	 <TELL "Wheeeeeeeeee!!!!!" CR>>
 
 <ROUTINE V-LEAVE () <PERFORM ,V?WALK ,P?OUT>>
 
@@ -914,8 +925,7 @@ by knocking down the wall on the east of the room." CR>
 "Unfortunately, you were holding it at the time.">)
 		      (T
 		       <REMOVE ,PRSO>
-		       <TELL "The " D ,PRSO " is consumed by fire." CR>)
-		      (ELSE <TELL "You don't have that." CR>)>)
+		       <TELL "The " D ,PRSO " is consumed by fire." CR>)>)
 	       (T <TELL "You can't burn a " D ,PRSO "." CR>)>>
 
 <ROUTINE PRE-TURN
@@ -1049,7 +1059,7 @@ by knocking down the wall on the east of the room." CR>
 
 <ROUTINE V-EXORCISE () <TELL "What a bizarre concept!" CR>>
 
-<ROUTINE V-SHAKE ("AUX" X)
+<ROUTINE V-SHAKE ()
 	 <COND (<FSET? ,PRSO ,VILLAIN>
 		<YUK>)
 	       (<NOT <FSET? ,PRSO ,TAKEBIT>>
@@ -1103,13 +1113,8 @@ by knocking down the wall on the east of the room." CR>
 	 ()
 	 <COND (<==? ,PRSI ,ROPE>
 		<COND (<FSET? ,PRSO ,VILLAIN>
-		       <COND (<L? <GETP ,PRSO ,P?STRENGTH> 0>
-			      <TELL
-"Your attempt to tie up the " D ,PRSO " awakens him.">
-			      <AWAKEN ,PRSO>)
-			     (ELSE
-			      <TELL
-"The " D ,PRSO " struggles and you cannot tie him up." CR>)>)
+		    <TELL
+"The " D ,PRSO " struggles and you cannot tie him up." CR>)
 		      (ELSE <WHY>)>)
 	       (ELSE <TELL "You'd never tie it with that!" CR>)>>
 
@@ -1122,13 +1127,8 @@ by knocking down the wall on the east of the room." CR>
 
 <ROUTINE V-ALARM ()
 	 <COND (<FSET? ,PRSO ,VILLAIN>
-		<COND (<L? <GETP ,PRSO ,P?STRENGTH> 0>
-		       <TELL "The " D ,PRSO " is rudely awakened." CR>
-		       <AWAKEN ,PRSO>)
-		      (T
-		       <TELL "He's wide awake, or haven't you noticed..."
-			     CR>)>)
-	       (ELSE
+	    <TELL "He's wide awake, or haven't you noticed..." CR>)
+	 (ELSE
 		<TELL "The " D ,PRSO " isn't sleeping." CR>)>>
 
 <ROUTINE MUNG-ROOM (RM STR)
@@ -1168,8 +1168,7 @@ by knocking down the wall on the east of the room." CR>
 <ROUTINE V-WIND ()
 	 <TELL "You cannot wind up a " D ,PRSO "." CR>>
 
-<ROUTINE V-COUNT ("AUX" OBJS CNT)
-    #DECL ((CNT) FIX)
+<ROUTINE V-COUNT ()
     <COND (<==? ,PRSO ,LEAVES>
 	   <TELL "There are 69,105 leaves here." CR>)
 	  (T
@@ -1200,3 +1199,6 @@ by knocking down the wall on the east of the room." CR>
 
 <ROUTINE V-FIND ()
 	 <TELL "You're the adventurer." CR>>
+
+<ROUTINE V-FOLLOW ()
+	 <TELL "You're nuts!" CR>>
