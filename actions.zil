@@ -1083,7 +1083,6 @@ is holding his nose." CR>)>)
 	      MINE-2
 	      MINE-3
 	      GAS-ROOM
-              SQUEEKY-ROOM
 	      MINE-ENTRANCE>>
 
 <GLOBAL CAGE-TOP T>
